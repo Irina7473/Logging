@@ -13,7 +13,7 @@ namespace LoggingLibrary
     {
         Info,
         Warn,
-        Debag,
+        Debug,
         Error
     }
 }
