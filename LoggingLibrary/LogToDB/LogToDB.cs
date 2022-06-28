@@ -8,6 +8,8 @@ namespace LoggingLibrary.LogToDB
 {
     public class LogToDB : ILogger
     {
+        public static event Action<LogType, string> Notify;
+
         private static FileStream file;
         private static Config config;
         private string connectionString;
@@ -38,15 +40,15 @@ namespace LoggingLibrary.LogToDB
             }
             catch (InvalidOperationException)
             {
-                throw new Exception("Ошибка открытия базы данных");
+                Notify?.Invoke(LogType.Error, "Ошибка открытия базы данных");
             }
             catch (SqliteException)
             {
-                throw new Exception("Подключаемся к уже открытой базе данных");
+                Notify?.Invoke(LogType.Error, "Подключаемся к уже открытой базе данных");
             }
             catch (Exception)
             {
-                throw new Exception("Путь к базе данных не найден");
+                Notify?.Invoke(LogType.Error, "Путь к базе данных не найден");
             }
         }
 
@@ -65,7 +67,7 @@ namespace LoggingLibrary.LogToDB
         public void RecordToLog(LogType type, string message)
         {
             _connection.Open();
-            _query.CommandText = $"INSERT INTO tab_total_log (type_event, date_time_event, user, message)" +
+            _query.CommandText = $"INSERT INTO tab_log_DB (type_event, date_time_event, user, message)" +
                     $"VALUES ('{type}', '{DateTime.Now}', '{Environment.UserName}', '{message}')";
             _query.ExecuteNonQuery();
             _connection.Close();
@@ -74,11 +76,12 @@ namespace LoggingLibrary.LogToDB
         public string ReadTheLog()
         {
             _connection.Open();
-            var sql = "SELECT * FROM tab_total_log";
+            var sql = "SELECT * FROM tab_log_DB";
             using var result = SelectQuery(sql);
 
             if (!result.HasRows)
             {
+                Notify?.Invoke(LogType.Info, "Нет записей в базе данных");
                 return "Нет данных";
             }
             else
@@ -107,7 +110,7 @@ namespace LoggingLibrary.LogToDB
         public void ClearLog()
         {
             _connection.Open();
-            _query.CommandText = "DELETE FROM tab_total_log";
+            _query.CommandText = "DELETE FROM tab_log_DB";
             _query.ExecuteNonQuery();
             _connection.Close();
         }

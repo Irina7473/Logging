@@ -48,7 +48,7 @@ namespace TestLog
             Console.WriteLine("Создаю лог в БД");
 
             //Здесь пока не работает создание лога и открытие
-            string patch = "C:/IRINA/TEST TASK/Logging/LoggingLibrary/LogToDB/Config.cs";
+            string patch = @"J:\Test tasks\Logging\LoggingLibrary\LogToDB\logger_db.sqlite";
             var log3 = new LogToDB(patch);
             Console.WriteLine(log3.ReadTheLog());
             Console.WriteLine("---------------------------");
@@ -63,7 +63,7 @@ namespace TestLog
             log3.RecordToLog(LogType.Warn, "Проверка лога");
             log3.RecordToLog(LogType.Error, "Проверь ошибки");
             log3.RecordToLog(LogType.Debug, "Распаковываю");
-            Console.WriteLine(log1.ReadTheLog());
+            Console.WriteLine(log3.ReadTheLog());
             Console.WriteLine("---------------------------");
         }
 

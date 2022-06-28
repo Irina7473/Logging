@@ -1,4 +1,4 @@
-﻿namespace LoggingLibrary.LogToDB
+namespace LoggingLibrary.LogToDB
 {
     public class Config
     {
