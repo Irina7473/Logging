@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace LoggingLibrary.LogToDB
 {
+    /// <summary>
+    /// Класс для журналирования в базу данных
+    /// </summary>
     public class LogToDB : ILogger
     {
         public static event Action<LogType, string> Notify;
@@ -16,6 +19,9 @@ namespace LoggingLibrary.LogToDB
         private static SqliteConnection _connection;
         private static SqliteCommand _query;
 
+        /// <summary>
+        /// Конструктор лога в БД без параметров
+        /// </summary>
         public LogToDB()
         {
             file = new("configLog.json", FileMode.Open);
@@ -25,6 +31,10 @@ namespace LoggingLibrary.LogToDB
             _query = new SqliteCommand { Connection = _connection };
         }
 
+        /// <summary>
+        /// Конструктор лога в БД по заданному пути
+        /// </summary>
+        /// <param name="patch"></param>
         public LogToDB(string patch)
         {
             connectionString = $"Data Source={patch};Mode=ReadWrite;";
@@ -64,6 +74,11 @@ namespace LoggingLibrary.LogToDB
             return result;
         }
 
+        /// <summary>
+        /// Запись сообщений в БД
+        /// </summary>
+        /// <param name="type">Тип сообщения</param>
+        /// <param name="message">Сообщение</param>
         public void RecordToLog(LogType type, string message)
         {
             _connection.Open();
@@ -73,6 +88,10 @@ namespace LoggingLibrary.LogToDB
             _connection.Close();
         }
 
+        /// <summary>
+        /// Чтение всех сообщений из БД
+        /// </summary>
+        /// <returns>Строка, которая включает все записи</returns>
         public string ReadTheLog()
         {
             _connection.Open();
@@ -107,6 +126,9 @@ namespace LoggingLibrary.LogToDB
             }
         }
 
+        /// <summary>
+        /// Очищение БД
+        /// </summary>
         public void ClearLog()
         {
             _connection.Open();

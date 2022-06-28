@@ -6,12 +6,23 @@ using System.Threading.Tasks;
 
 namespace LoggingLibrary
 {
+    /// <summary>
+    /// Класс для журналирования в консоль
+    /// </summary>
     public class LogToConsole : ILogger
     {
         public static event Action<LogType, string> Notify;
 
+        /// <summary>
+        /// Конструктор лога в консоль без параметров
+        /// </summary>
         public LogToConsole() { }              
 
+        /// <summary>
+        /// Вывод сообщений в консоль
+        /// </summary>
+        /// <param name="type">Тип сообщения</param>
+        /// <param name="message">Сообщение</param>
         public async void RecordToLog(LogType type, string message)
         {
             var text = type + " " + DateTime.Now + " " + Environment.UserName + " " + message;
@@ -23,13 +34,16 @@ namespace LoggingLibrary
             return null;
         }
 
+        /// <summary>
+        /// Очистка консоли
+        /// </summary>
         public void ClearLog()
         {
             Console.Clear();
         }
 
 
-        static void Output(LogType type, string message)
+        private static void Output(LogType type, string message)
         {
             switch (type)
             {
